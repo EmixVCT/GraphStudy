@@ -80,6 +80,7 @@ class Graph:
 		dict = self.computeValenceDistributionData()
 		dict = {k: v for k, v in sorted(dict.items())}
 		curve = {'x': [i for i in dict], 'y': [dict[i] for i in dict] };
+		print(curve)
 
 		# (bonus) Le diamètre du graphe (le plus long plus court chemin entre n’importe quelle paire
 		# de sommets). Vous décrirez l’algorithme utilisé, ainsi que sa complexité.
@@ -119,19 +120,38 @@ class Graph:
 		return nValency // len(self.vertices);
 
 	def computeValenceDistributionData(self):	### DIRTY CODE
+
+		# compute valence of every vertex {vertex: valence, ...}
 		valencePerVertex = defaultdict(int)
-
-		# compute valence of every vertex
 		for i in self.graph:
-			valencePerVertex[i] += 1
-			for j in self.graph[i]:
-				valencePerVertex[j] += 1
+			valencePerVertex[i] +=1
+			print('valencePerVertex', valencePerVertex.items())
 
+			for j in self.graph[i]:
+				if i not in valencePerVertex:
+					valencePerVertex.add(i)
+					valencePerVertex[i] = 0
+				valencePerVertex[i] +=1
+			print('valencePerVertex', valencePerVertex.items())
+
+
+		# compute number of apparence for every valence {valence: # apparition, ...}
 		valenceDistData = defaultdict(int)
 		for i in valencePerVertex:
 			valenceDistData[valencePerVertex[i]] += 1
+		print('valenceDistData', valenceDistData.items())
 
-		return valenceDistData
+
+		# compute frequency of every valence {valence: # frequency, ...}
+		valenceDistPercentage = defaultdict(int)
+		count = 0
+		for i in valenceDistData:
+			count += valenceDistData[i];
+
+		for i in valenceDistData:
+			valenceDistPercentage[i] += valenceDistData[i]/count*100;
+
+		return valenceDistPercentage
 
 
 class utils: 

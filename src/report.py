@@ -39,7 +39,7 @@ def makePDF(name="name", nVertices="nVertices", nEdges="nEdges", maxValency="max
 	ax.add_collection(yevents1)
 
 	# set the limits
-	ax.set_xlim([0, 10])
+	ax.set_xlim([0, maxValency+2])
 	ax.set_ylim([0, 100])
 
 	ax.set_title('Distribution des degrés')
@@ -61,6 +61,6 @@ def makePDF(name="name", nVertices="nVertices", nEdges="nEdges", maxValency="max
 																				name=name, nVertices=nVertices, nEdges=nEdges, 
 																				maxValency=maxValency, avgValency=avgValency)
 
-		convert_html_to_pdf(report_html, 'report-2.pdf')
+		convert_html_to_pdf(report_html, name + '-report.pdf')
 
 		return "report-2.pdf"
