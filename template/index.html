@@ -1,0 +1,27 @@
+<head>
+	<style>
+	</style>
+	<head>
+	<body>
+		<div id="header_content" style="background-color: #00d1b2;color: #fff;border-radius: 4px;position: relative;padding: 1.25rem 2.5rem 1.25rem 1.5rem;font-size: 1em;font-weight: 400;">
+			<h1><small>GRAPH REPORT : </small>{name}</h1>
+		</div>
+
+		<div style="display: flex; flex-direction: column;">
+			<div style="flex: 1">
+				<ul>
+					<li><b>Nombre de sommets : </b>{nVertices}</li>
+					<li><b>Nombre de d'arretes : </b>{nEdges}</li>
+					<li><b>Degré maximal : </b>{maxValency}</li>
+					<li><b>Degré moyen : </b>{avgValency}</li>
+				</ul>
+			</div>
+
+			<div style="flex: 2">
+				<center>
+					<img style="width: {width}; height: {height}" src="data:image/png;base64,{image}">				
+				</center>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,12 +1,15 @@
 
+from collections import defaultdict
+from report import makePDF as makeReportPDF
+
 class Graph:
 
-	def __init__(self, vertices=None, path=""):
-		if vertices:
-			self.vertices = vertices
-			self.graph = [None] * self.vertices
+	def __init__(self, path="", name="unnamed"):
+		
+		self.graph = defaultdict(list)
+		self.name = name
 
-		elif path:
+		if path:
 			self.loadFromAdjacentListCSV(path)
 
 
@@ -16,16 +19,11 @@ class Graph:
 			self.graph[src] = [];
 		if dest not in self.graph[src]: self.graph[src].append(dest)
 
-		if self.graph[dest] == None:
-			self.graph[dest] = [];
-		if src not in self.graph[dest]: self.graph[dest].append(src) # Adding the node to the source node 
-
 	# Function to print the graph 
 	def print_graph(self):
-		for i in range(self.vertices): 
-			print("[ {} ] : ".format(i), end='')
-			print(*self.graph[i], sep = ", ")
-
+		print(" * Graph : ", self.name)
+		for i in self.graph.items():
+			print(i)
 
 
 	### public static methods
@@ -35,26 +33,20 @@ class Graph:
 		print(" * Loading graph from file", path)
 
 		with open(path, 'r') as f:
-			reader = csv.reader(f)
 
-			self.vertices = len(list(reader))
-			self.graph = [None] * self.vertices
+			dialect = csv.Sniffer().sniff(f.read(1024)) # detect the syntax of the csv file
+			f.seek(0)
+
+			reader = csv.reader(f, dialect)
 
 			f.seek(0) # reset pointer at start of the file
 
-			index = 0
 			for row in reader:
-
-				print(index,':', ', '.join(row))
-
-				for entry in row:
-					print('	-> insterting', entry, 'in', index)
-					self.add_edge(index, int(entry))
-
-				index+=1
+				if row:
+					self.add_edge(int(row[0]), int(int(row[1])))
 
 
-	def saveToFile(self, path):
+	def saveToAdjacentListCSV(self, path):
 		import sys
 		original_stdout = sys.stdout
 
@@ -62,17 +54,84 @@ class Graph:
 
 		with open(path.name, 'w') as f:
 			sys.stdout = f # Change the standard output to the file we created.
-			for i in range(self.vertices):
-				print(*self.graph[i], sep = ",")
+			for i in self.graph:
+				for j in range(len(self.graph[i])):
+					print(i, self.graph[i][j])
 			sys.stdout = original_stdout
 
 
 
 	##### graph analisis
-	def analize(file):
-		print("### Analyzing graph ", file)
+	def analisis(self):
+		print("\n### Analyzing graph ", self.name)
+
+		nVertices = self.compute_nVertices()
+		print("- Nombre de sommets :", nVertices);
+
+		nEdges = self.compute_nEdges()
+		print("- Nombre d’arêtes :", nEdges);
+
+		maxValency = self.compute_maxValency()
+		print("- Degré maximal :", maxValency);
+
+		avgValency = self.compute_avgValency()
+		print("- Degré moyen :", avgValency);
+
+		dict = self.computeValenceDistributionData()
+		dict = {k: v for k, v in sorted(dict.items())}
+		curve = {'x': [i for i in dict], 'y': [dict[i] for i in dict] };
+
+		# (bonus) Le diamètre du graphe (le plus long plus court chemin entre n’importe quelle paire
+		# de sommets). Vous décrirez l’algorithme utilisé, ainsi que sa complexité.
+
+		pdf = makeReportPDF(name=self.name, nVertices=nVertices, nEdges=nEdges, maxValency=maxValency, avgValency=avgValency, curve=curve)
+		print(f'Full report saved at : @reports/{pdf}')
+
+	def compute_nVertices(self):
+		self.vertices = set(self.graph.keys())
+		for i in self.graph:
+			for j in self.graph[i]:
+				self.vertices.add(j)
+
+		return len(self.vertices)
 
 
+	def compute_nEdges(self):
+		edgesCount = 0
+		for i in self.graph:
+			for j in self.graph[i]:
+				edgesCount+=1
+
+		return edgesCount;
+
+	def compute_maxValency(self):
+		maxValency = 0
+		for i in self.graph:
+			maxValency = len(self.graph[i]) if len(self.graph[i]) > maxValency else maxValency
+
+		return maxValency;
+
+	def compute_avgValency(self):
+		nValency = 0
+		for i in self.graph:
+			nValency += len(self.graph[i])
+
+		return nValency // len(self.vertices);
+
+	def computeValenceDistributionData(self):	### DIRTY CODE
+		valencePerVertex = defaultdict(int)
+
+		# compute valence of every vertex
+		for i in self.graph:
+			valencePerVertex[i] += 1
+			for j in self.graph[i]:
+				valencePerVertex[j] += 1
+
+		valenceDistData = defaultdict(int)
+		for i in valencePerVertex:
+			valenceDistData[valencePerVertex[i]] += 1
+
+		return valenceDistData
 
 
 class utils: 
@@ -80,10 +139,10 @@ class utils:
 	def genRandom_EG(vertices):
 		import random
 
-		graph = Graph(vertices=vertices)
+		graph = Graph()
 		
-		for i in range(graph.vertices):
-			for j in range(i+1, graph.vertices):
+		for i in range(vertices):
+			for j in range(i+1, vertices):
 				if random.choice([True, False]):
 					graph.add_edge(i, j)
 	  
@@ -94,12 +153,12 @@ class utils:
 
 	def genRandomGraph(method):
 		if (method == "EG"):
-			print("### Generating a graph using Edgar Gilbert algorithm")
+			print("\n### Generating a graph using Edgar Gilbert algorithm")
 			return utils.genRandom_EG(5);
 
 		elif (method == "BA"):
-			print("### Generating a graph using Barabàsi-Albert algorithm")
+			print("\n### Generating a graph using Barabàsi-Albert algorithm")
 			return utils.genRandom_BA(5);
 
 		else:
-			print("### BEEEZRAZE")
+			print("\n### BEEEZRAZE")

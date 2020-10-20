@@ -1,6 +1,34 @@
 # GraphStudy
 Etude de graphes du Web
 
+## Instructions
+- Install dependencies
+	`pip3 install -r requirements.txt`
+- You can now run the program
+	`python3 ./src/main.py [OPTIONS]`
+### Options
+`python3 ./src/main.py --help` To show all options :
+```bash
+	--gen-graph         Generate a graph (you can specify the method with
+						--method, default EG)
+	--method [EG|BA]	[with --gen-graph] Name if the generation method (EG for
+						Edgar Gilbert, BA for Barabàsi-Albert)
+	--out FILENAME		[with --gen-graph] Path to the file of the generated
+						graph
+
+	--analyze FILENAME	Path to the file of the graph to analyze
+
+	--help				Show this message and exit.
+```
+
+### Examples
+- Generate a graph with Barabàsi-Albert method and store it :
+`python3 ./src/main.py --gen-graph --method BA --out ba_graph.csv`
+- Analyse it :
+`python3 ./src/main.py --analyze ./ba_graph.csv`
+Informations on the graph should be printed on your terminal, and you can find more results in the pdf report generated for you (for this example it should be ./ba_graph-report.pdf)
+
+
 ## Stockage d'un graphe
 (https://www.wikiwand.com/en/Graph_(abstract_data_type)#/Representations)
 with |V | the number of vertices and |E | the number of edges
