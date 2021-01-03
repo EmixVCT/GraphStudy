@@ -11,19 +11,18 @@ Etude de graphes du Web
 ```bash
 	--gen-graph         Generate a graph (you can specify the method with
 						--method, default EG)
-	--method [EG|BA]	[with --gen-graph] Name if the generation method (EG for
+	--method [EG|BA]	  [with --gen-graph] Name if the generation method (EG for
 						Edgar Gilbert, BA for Barabàsi-Albert)
-	--out FILENAME		[with --gen-graph] Path to the file of the generated
+	--out FILENAME		   [with --gen-graph] Path to the file of the generated
 						graph
 
-	--debug             [with --debug] Info will be print into the console
-
-  	--diameter          [with --diameter] analyze calcul the diameter of the
-                      	graph
+	--debug              Info will be print into the console
 
 	--analyze FILENAME	Path to the file of the graph to analyze
 
-	--help				Show this message and exit.
+	--diameter           [with --analyze] Compute the diameter of the graph
+
+	--help			      Show this message and exit.
 ```
 
 ### Examples
@@ -40,18 +39,19 @@ Informations on the graph should be printed on your terminal, and you can find m
 `python3 ./src/main.py --analyze ./ba_graph.csv --diameter`
 Be careful this operation can take a lot of time
 
-## Stockage d'un graphe
+## About the storage of the generated graphs
+
 (https://www.wikiwand.com/en/Graph_(abstract_data_type)#/Representations)
-with |V | the number of vertices and |E | the number of edges
+with v the number of vertices and e the number of edges
 
-							|	Adjacency list		|Adjacency matrix	|Incidence matrix
-===========================================================================================
-Store graph 				|	O(|V|+|E|)			|O(|V|^2) 		|O(|V|·|E|)
-Add vertex 					|	O(1)				|O(|V|^2)			|O(|V|·|E|)
-Add edge 					|	O(1) 				|O(1) 				|O(|V|·|E|)
-Remove vertex 				|	O(|E|) 				|O(|V|^2) 		|O(|V|·|E|)
-Remove edge 				|	O(|V|) 				|O(1) 				|O(|V|·|E|)
-Are vertices x and y adjacent| 	O(|V|) 				|O(1) 				|O(|E|)
-Remarks 					|	Slow to remove vertices and edges, because it needs to find all vertices or edges | Slow to add or remove vertices, because matrix must be resized/copied | Slow to add or remove vertices and edges, because matrix must be resized/copied 
+								|	Adjacency list	|Adjacency matrix	|Incidence matrix
+------------------------|-----------------|-----------------|----------------
+Store graph 				|	O(v+e)		|	O(v^2) 		|O(v·e)
+Add vertex 					|	O(1)				|	O(v^2)			|O(v·e)
+Add edge 					|	O(1) 				|	O(1) 				|O(v·e)
+Remove vertex 				|	O(e) 			|	O(v^2) 		|O(v·e)
+Remove edge 				|	O(v) 			|	O(1) 				|O(v·e)
+Are vertices x and y adjacent| 	O(v) 	|	O(1) 				|O(e)
+Remarks 						|	Slow to remove vertices and edges, because it needs to find all vertices or edges | Slow to add or remove vertices, because matrix must be resized/copied | Slow to add or remove vertices and edges, because matrix must be resized/copied
 
-On utilisera la liste d'adjacence pour sa rapidité à l'insertion.
+We will use an adjacency list for it's insertion operation efficiency.

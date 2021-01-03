@@ -68,6 +68,7 @@ class Graph:
 			for i in self.graph:
 				for j in range(len(self.graph[i])):
 					print(i, self.graph[i][j])
+					print(self.graph[i][j], i)
 			sys.stdout = original_stdout
 
 
@@ -188,7 +189,7 @@ class Graph:
 		longest = 0
 		n = 0
 		#print(self.dijkstra(2034,1939))
-		
+
 		for i in self.graph:
 			print(" compute_diameter : ",round((n*100)/(len(self.graph))),"%", end='\r')
 			n += 1
