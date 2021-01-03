@@ -16,6 +16,11 @@ Etude de graphes du Web
 	--out FILENAME		[with --gen-graph] Path to the file of the generated
 						graph
 
+	--debug             [with --debug] Info will be print into the console
+
+  	--diameter          [with --diameter] analyze calcul the diameter of the
+                      	graph
+
 	--analyze FILENAME	Path to the file of the graph to analyze
 
 	--help				Show this message and exit.
@@ -28,6 +33,12 @@ Etude de graphes du Web
 `python3 ./src/main.py --analyze ./ba_graph.csv`
 Informations on the graph should be printed on your terminal, and you can find more results in the pdf report generated for you (for this example it should be ./ba_graph-report.pdf)
 
+- To see debug message in your console :
+`python3 ./src/main.py --analyze ./ba_graph.csv --debug`
+
+- If you want to calculate the diameter of the graph :
+`python3 ./src/main.py --analyze ./ba_graph.csv --diameter`
+Be careful this operation can take a lot of time
 
 ## Stockage d'un graphe
 (https://www.wikiwand.com/en/Graph_(abstract_data_type)#/Representations)
