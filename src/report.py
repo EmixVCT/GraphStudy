@@ -37,10 +37,11 @@ def makePDF(name="name", nVertices="nVertices", nEdges="nEdges", maxValency="max
 	# add the events to the axis
 	ax.add_collection(xevents1)
 	ax.add_collection(yevents1)
+	#print(curve['y'])
 
 	# set the limits
-	ax.set_xlim([0, maxValency+2])
-	ax.set_ylim([0, 100])
+	ax.set_xlim([0, maxValency+1])
+	ax.set_ylim([0, max(curve['y'])+1])
 
 	ax.set_title('Distribution des degrés')
 	plt.xlabel('Degré')

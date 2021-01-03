@@ -1,5 +1,6 @@
 
 from collections import defaultdict
+
 from report import makePDF as makeReportPDF
 from utils import debug
 
@@ -72,7 +73,7 @@ class Graph:
 
 
 	##### graph analisis
-	def analisis(self):
+	def analisis(self,diameter):
 		debug("\n### Analyzing graph ", self.name)
 
 		nVertices = self.compute_nVertices()
@@ -91,6 +92,10 @@ class Graph:
 		dict = {k: v for k, v in sorted(dict.items())}
 		curve = {'x': [i for i in dict], 'y': [dict[i] for i in dict] };
 		debug(curve)
+
+		if diameter:
+			diameter = self.compute_diameter()
+			debug(diameter)
 
 		# (bonus) Le diamètre du graphe (le plus long plus court chemin entre n’importe quelle paire
 		# de sommets). Vous décrirez l’algorithme utilisé, ainsi que sa complexité.
@@ -179,6 +184,56 @@ class Graph:
 
 		return valenceDistPercentage
 
+	def compute_diameter(self):
+		longest = 0
+		n = 0
+		#print(self.dijkstra(2034,1939))
+		
+		for i in self.graph:
+			print(" compute_diameter : ",round((n*100)/(len(self.graph))),"%", end='\r')
+			n += 1
+			for j in self.graph:
+				if (i!=j):
+					#print("test :",i," et ",j)
+					shorter = self.dijkstra(i,j)
+					#if (float('inf') != longest and shorter > longest):
+					#	longest = 
+					pass
+			
+
+
+
+		print("")
+		return longest
+
+	def dijkstra(self, src, dst=None):
+		nodes = []
+		for n in self.graph:
+			nodes.append(n)
+			nodes += [x for x in self.graph[n]]
+
+		q = set(nodes)
+
+		nodes = list(q)
+		dist = dict()
+		for n in nodes:
+			dist[n] = float('inf')
+
+		dist[src] = 0
+
+		while q:
+			u = min(q, key=dist.get)
+			q.remove(u)
+
+			if dst is not None and u == dst:
+				return dist[dst]
+
+			for v in self.graph[u]:
+				alt = dist[u] + 1
+				if alt < dist[v]:
+					dist[v] = alt
+
+		return dist
 
 class utils: 
 	##### graph generation

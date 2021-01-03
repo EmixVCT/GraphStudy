@@ -8,7 +8,7 @@ from utils import debug,set_debug
 
 
 # program arguments handling
-def handleArgs(gen_graph, method, in_file, out_file):
+def handleArgs(gen_graph, method, in_file, out_file,diameter):
 	print("")
 
 	if gen_graph:
@@ -23,7 +23,7 @@ def handleArgs(gen_graph, method, in_file, out_file):
 		graph = Graph(path=in_file.name, name=in_file.name)
 		if debug:
 			graph.print_graph()
-		graph.analisis()
+		graph.analisis(diameter)
 	print("")
 
 
@@ -34,14 +34,15 @@ def handleArgs(gen_graph, method, in_file, out_file):
 @click.option("--out", type=click.File('w', lazy=False), help="[with --gen-graph] Path to the file of the generated graph")
 
 @click.option("--debug", is_flag=True, help="[with --debug] Info will be print into the console")
+@click.option("--diameter", is_flag=True, help="[with --diameter] analyze calcul the diameter of the graph")
 
 @click.option("--analyze", type=click.File('rb', lazy=False), help="Path to the file of the graph")
 
-def main(gen_graph, method, analyze, out,debug):
+def main(gen_graph, method, analyze, out,debug,diameter):
     """ Main program """
     
     set_debug(debug)
-    handleArgs(gen_graph, method, analyze, out)
+    handleArgs(gen_graph, method, analyze, out, diameter)
 
     return 0
 
