@@ -6,7 +6,7 @@ from utils import debug
 class Graph:
 
 	def __init__(self, path="", name="unnamed"):
-		
+
 		self.graph = defaultdict(list)
 		self.name = name
 
@@ -20,7 +20,7 @@ class Graph:
 			self.graph[src] = [];
 		if dest not in self.graph[src]: self.graph[src].append(dest)
 
-	# Function to print the graph 
+	# Function to print the graph
 	def print_graph(self):
 		debug(" * Graph : ", self.name)
 		for i in self.graph.items():
@@ -31,7 +31,7 @@ class Graph:
 	def loadFromAdjacentListCSV(self, path):
 		import csv
 
-		debug(" * Loading graph from file", path)
+		print(" * Loading graph from file", path)
 		n = 0
 
 		with open(path, 'r') as f:
@@ -60,13 +60,13 @@ class Graph:
 		import sys
 		original_stdout = sys.stdout
 
-		debug(" * Saving graph to file", path.name)
+		print(" * Saving graph to file", path.name)
 
 		with open(path.name, 'w') as f:
 			sys.stdout = f # Change the standard output to the file we created.
 			for i in self.graph:
 				for j in range(len(self.graph[i])):
-					debug(i, self.graph[i][j])
+					print(i, self.graph[i][j])
 			sys.stdout = original_stdout
 
 
@@ -95,7 +95,7 @@ class Graph:
 		# (bonus) Le diamètre du graphe (le plus long plus court chemin entre n’importe quelle paire
 		# de sommets). Vous décrirez l’algorithme utilisé, ainsi que sa complexité.
 		pdf = makeReportPDF(name=self.name, nVertices=nVertices, nEdges=nEdges, maxValency=maxValency, avgValency=avgValency, curve=curve)
-		debug(f'Full report saved at : @reports/{pdf}')
+		print(f'Full report saved at : @reports/{pdf}')
 
 	def compute_nVertices(self):
 		n = 0
@@ -180,31 +180,62 @@ class Graph:
 		return valenceDistPercentage
 
 
-class utils: 
+class utils:
 	##### graph generation
 	def genRandom_EG(vertices):
 		import random
 
 		graph = Graph()
-		
+
 		for i in range(vertices):
 			for j in range(i+1, vertices):
 				if random.choice([True, False]):
 					graph.add_edge(i, j)
-	  
+
 		return graph;
 
-	def genRandom_BA(vertices):
-		debug("Not avaliable for the moment.")
+	def genRandom_BA(vertices, m):
+
+		if m < 1 or  m >= vertices:
+			print(f'Barabási–Albert network must have m >= 1 and m < n, m = {m}, n = {n}')
+
+		graph = Graph()
+
+		targets=list(range(m))	# Target nodes for new edges
+		repeated_nodes=[]		# List of existing nodes, with nodes repeated once for each adjacent edge
+		source=m				# Start adding the other n-m nodes. The first node is m.
+
+		while source < vertices:
+			for target in targets:
+				graph.add_edge(source, target) 		# Add edges to m nodes from the source.
+
+			repeated_nodes.extend(targets) 			# Add one node to the list for each new edge just created.
+			repeated_nodes.extend(range(m)) 		# And the new node "source" has m edges to add to the list.
+
+			# Now choose m unique nodes from the existing nodes
+			# Pick uniformly from repeated_nodes (preferential attachement)
+			targets = utils.random_subset(repeated_nodes, m)
+			source += 1
+
+		return graph;
+
+
+	def random_subset(repeated_nodes, m):
+		import random
+
+		rand_index = [ random.randrange(len(repeated_nodes)) for i in range(m) ]
+		res = [repeated_nodes[r] for r in rand_index]
+		return res
+
 
 	def genRandomGraph(method):
 		if (method == "EG"):
-			debug("\n### Generating a graph using Edgar Gilbert algorithm")
+			print("\n### Generating a graph using Edgar Gilbert algorithm")
 			return utils.genRandom_EG(5);
 
 		elif (method == "BA"):
-			debug("\n### Generating a graph using Barabàsi-Albert algorithm")
-			return utils.genRandom_BA(5);
+			print("\n### Generating a graph using Barabàsi-Albert algorithm")
+			return utils.genRandom_BA(5, 2);
 
 		else:
-			debug("\n### BEEEZRAZE")
+			print("\n### BEEEZRAZE")
