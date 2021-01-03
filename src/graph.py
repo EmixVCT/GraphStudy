@@ -192,23 +192,22 @@ class Graph:
 		for i in self.graph:
 			print(" compute_diameter : ",round((n*100)/(len(self.graph))),"%", end='\r')
 			n += 1
-			for j in self.graph:
-				if (i!=j):
-					#print("test :",i," et ",j)
-					shorter = self.dijkstra(i,j)
-					if (float('inf') != longest and shorter > longest):
-						longest = shorter			
-
-		print("")
+			debug("")
+			shorter = self.dijkstra(i)
+			max_value = max(shorter.values())  # maximum value
+			if (float('inf') != longest and max_value > longest):
+				longest = max_value
+				
+		print(" compute_diameter : ",round((n*100)/(len(self.graph))),"%")
 		return longest
 
 	def dijkstra(self, src, dst=None):
 		nodes = []
 		for n in self.graph:
 			nodes.append(n)
-			nodes += [x for x in self.graph[n]]
 
 		q = set(nodes)
+		debug(q)
 
 		nodes = list(q)
 		dist = dict()
@@ -217,17 +216,22 @@ class Graph:
 
 		dist[src] = 0
 
+
+
 		while q:
 			u = min(q, key=dist.get)
 			q.remove(u)
 
 			if dst is not None and u == dst:
+				debug(u, "dist: ",dist[dst]," entre ",src," et ",dst)
 				return dist[dst]
 
 			for v in self.graph[u]:
 				alt = dist[u] + 1
-				if alt < dist[v]:
+				if v in dist and alt < dist[v]:
 					dist[v] = alt
+
+		debug("dist: ",dist," entre ",src," et le reste")
 
 		return dist
 
