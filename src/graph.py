@@ -196,12 +196,8 @@ class Graph:
 				if (i!=j):
 					#print("test :",i," et ",j)
 					shorter = self.dijkstra(i,j)
-					#if (float('inf') != longest and shorter > longest):
-					#	longest = 
-					pass
-			
-
-
+					if (float('inf') != longest and shorter > longest):
+						longest = shorter			
 
 		print("")
 		return longest
