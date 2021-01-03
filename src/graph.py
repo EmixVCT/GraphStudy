@@ -32,6 +32,7 @@ class Graph:
 		import csv
 
 		debug(" * Loading graph from file", path)
+		n = 0
 
 		with open(path, 'r') as f:
 
@@ -42,9 +43,17 @@ class Graph:
 
 			f.seek(0) # reset pointer at start of the file
 
+			print("Importing CSV file..")
+			reader = list(reader);
+
 			for row in reader:
 				if row:
 					self.add_edge(int(row[0]), int(int(row[1])))
+				n+=1
+				print(" loadFromAdjacentListCSV : ",round((n*100)/len(reader)),"%", end='\r')
+
+			print("")
+
 
 
 	def saveToAdjacentListCSV(self, path):
@@ -85,39 +94,52 @@ class Graph:
 
 		# (bonus) Le diamètre du graphe (le plus long plus court chemin entre n’importe quelle paire
 		# de sommets). Vous décrirez l’algorithme utilisé, ainsi que sa complexité.
-
 		pdf = makeReportPDF(name=self.name, nVertices=nVertices, nEdges=nEdges, maxValency=maxValency, avgValency=avgValency, curve=curve)
 		debug(f'Full report saved at : @reports/{pdf}')
 
 	def compute_nVertices(self):
+		n = 0
 		self.vertices = set(self.graph.keys())
 		for i in self.graph:
 			for j in self.graph[i]:
 				self.vertices.add(j)
-
+			n+=1
+			print(" compute_nVertices : ",round((n*100)/len(self.graph)),"%", end='\r')
+		print("")
 		return len(self.vertices)
 
 
 	def compute_nEdges(self):
 		edgesCount = 0
+		n = 0
 		for i in self.graph:
 			for j in self.graph[i]:
 				edgesCount+=1
-
+			n+=1
+			print(" compute_nEdges : ",round((n*100)/len(self.graph)),"%", end='\r')
+		print("")
 		return edgesCount;
 
 	def compute_maxValency(self):
 		maxValency = 0
+		n = 0
 		for i in self.graph:
 			maxValency = len(self.graph[i]) if len(self.graph[i]) > maxValency else maxValency
+			n+=1
+			print(" compute_maxValency : ",round((n*100)/len(self.graph)),"%", end='\r')
 
+		print("")
 		return maxValency;
 
 	def compute_avgValency(self):
 		nValency = 0
+		n = 0
 		for i in self.graph:
 			nValency += len(self.graph[i])
+			n+=1
+			print(" compute_avgValency : ",round((n*100)/len(self.graph)),"%", end='\r')
 
+		print("")
 		return nValency // len(self.vertices);
 
 	def computeValenceDistributionData(self):	### DIRTY CODE
@@ -136,9 +158,9 @@ class Graph:
 				valencePerVertex[i] +=1
 			debug('valencePerVertex', valencePerVertex.items())
 			n+=1
-			#print(n)
+			print(" computeValenceDistributionData : ",round((n*100)/len(self.graph)),"%", end='\r')
 
-
+		print("")
 		# compute number of apparence for every valence {valence: # apparition, ...}
 		valenceDistData = defaultdict(int)
 		for i in valencePerVertex:

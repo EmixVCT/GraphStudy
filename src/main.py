@@ -11,8 +11,6 @@ from utils import debug,set_debug
 def handleArgs(gen_graph, method, in_file, out_file):
 	print("")
 
-	debug('koko');
-
 	if gen_graph:
 		graph = utils.genRandomGraph(method)
 		if graph:
