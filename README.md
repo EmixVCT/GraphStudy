@@ -45,7 +45,7 @@ Be careful this operation can take a lot of time
 with |V | the number of vertices and |E | the number of edges
 
 								|	Adjacency list	|Adjacency matrix	|Incidence matrix
-===========================================================================================
+------------------------|-----------------|-----------------|----------------
 Store graph 				|	O(|V|+|E|)		|	O(|V|^2) 		|O(|V|·|E|)
 Add vertex 					|	O(1)				|	O(|V|^2)			|O(|V|·|E|)
 Add edge 					|	O(1) 				|	O(1) 				|O(|V|·|E|)
