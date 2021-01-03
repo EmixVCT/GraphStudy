@@ -1,6 +1,7 @@
 
 from collections import defaultdict
 from report import makePDF as makeReportPDF
+from utils import debug
 
 class Graph:
 
@@ -21,16 +22,16 @@ class Graph:
 
 	# Function to print the graph 
 	def print_graph(self):
-		print(" * Graph : ", self.name)
+		debug(" * Graph : ", self.name)
 		for i in self.graph.items():
-			print(i)
+			debug(i)
 
 
 	### public static methods
 	def loadFromAdjacentListCSV(self, path):
 		import csv
 
-		print(" * Loading graph from file", path)
+		debug(" * Loading graph from file", path)
 
 		with open(path, 'r') as f:
 
@@ -50,43 +51,43 @@ class Graph:
 		import sys
 		original_stdout = sys.stdout
 
-		print(" * Saving graph to file", path.name)
+		debug(" * Saving graph to file", path.name)
 
 		with open(path.name, 'w') as f:
 			sys.stdout = f # Change the standard output to the file we created.
 			for i in self.graph:
 				for j in range(len(self.graph[i])):
-					print(i, self.graph[i][j])
+					debug(i, self.graph[i][j])
 			sys.stdout = original_stdout
 
 
 
 	##### graph analisis
 	def analisis(self):
-		print("\n### Analyzing graph ", self.name)
+		debug("\n### Analyzing graph ", self.name)
 
 		nVertices = self.compute_nVertices()
-		print("- Nombre de sommets :", nVertices);
+		debug("- Nombre de sommets :", nVertices);
 
 		nEdges = self.compute_nEdges()
-		print("- Nombre d’arêtes :", nEdges);
+		debug("- Nombre d’arêtes :", nEdges);
 
 		maxValency = self.compute_maxValency()
-		print("- Degré maximal :", maxValency);
+		debug("- Degré maximal :", maxValency);
 
 		avgValency = self.compute_avgValency()
-		print("- Degré moyen :", avgValency);
+		debug("- Degré moyen :", avgValency);
 
 		dict = self.computeValenceDistributionData()
 		dict = {k: v for k, v in sorted(dict.items())}
 		curve = {'x': [i for i in dict], 'y': [dict[i] for i in dict] };
-		print(curve)
+		debug(curve)
 
 		# (bonus) Le diamètre du graphe (le plus long plus court chemin entre n’importe quelle paire
 		# de sommets). Vous décrirez l’algorithme utilisé, ainsi que sa complexité.
 
 		pdf = makeReportPDF(name=self.name, nVertices=nVertices, nEdges=nEdges, maxValency=maxValency, avgValency=avgValency, curve=curve)
-		print(f'Full report saved at : @reports/{pdf}')
+		debug(f'Full report saved at : @reports/{pdf}')
 
 	def compute_nVertices(self):
 		self.vertices = set(self.graph.keys())
@@ -120,26 +121,29 @@ class Graph:
 		return nValency // len(self.vertices);
 
 	def computeValenceDistributionData(self):	### DIRTY CODE
+		n = 0
 
 		# compute valence of every vertex {vertex: valence, ...}
 		valencePerVertex = defaultdict(int)
 		for i in self.graph:
 			valencePerVertex[i] +=1
-			print('valencePerVertex', valencePerVertex.items())
+			debug('valencePerVertex', valencePerVertex.items())
 
 			for j in self.graph[i]:
 				if i not in valencePerVertex:
 					valencePerVertex.add(i)
 					valencePerVertex[i] = 0
 				valencePerVertex[i] +=1
-			print('valencePerVertex', valencePerVertex.items())
+			debug('valencePerVertex', valencePerVertex.items())
+			n+=1
+			#print(n)
 
 
 		# compute number of apparence for every valence {valence: # apparition, ...}
 		valenceDistData = defaultdict(int)
 		for i in valencePerVertex:
 			valenceDistData[valencePerVertex[i]] += 1
-		print('valenceDistData', valenceDistData.items())
+		debug('valenceDistData', valenceDistData.items())
 
 
 		# compute frequency of every valence {valence: # frequency, ...}
@@ -169,16 +173,16 @@ class utils:
 		return graph;
 
 	def genRandom_BA(vertices):
-		print("Not avaliable for the moment.")
+		debug("Not avaliable for the moment.")
 
 	def genRandomGraph(method):
 		if (method == "EG"):
-			print("\n### Generating a graph using Edgar Gilbert algorithm")
+			debug("\n### Generating a graph using Edgar Gilbert algorithm")
 			return utils.genRandom_EG(5);
 
 		elif (method == "BA"):
-			print("\n### Generating a graph using Barabàsi-Albert algorithm")
+			debug("\n### Generating a graph using Barabàsi-Albert algorithm")
 			return utils.genRandom_BA(5);
 
 		else:
-			print("\n### BEEEZRAZE")
+			debug("\n### BEEEZRAZE")
