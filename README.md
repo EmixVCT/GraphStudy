@@ -13,6 +13,14 @@ Etude de graphes du Web
 						--method, default EG)
 	--method [EG|BA]	  [with --gen-graph] Name if the generation method (EG for
 						Edgar Gilbert, BA for Barabàsi-Albert)
+
+	--vertices INTEGER RANGE  [with --gen-graph] The numbers of vertices
+                            [default: 5]
+
+  	--m INTEGER RANGE         [with --gen-graph] The numbers 'm' for Barabàsi-
+                            Albert graph generation  [default: 2]
+
+
 	--out FILENAME		   [with --gen-graph] Path to the file of the generated
 						graph
 
@@ -28,6 +36,8 @@ Etude de graphes du Web
 ### Examples
 - Generate a graph with Barabàsi-Albert method and store it :
 `python3 ./src/main.py --gen-graph --method BA --out ba_graph.csv`
+OR (for specifie the number of vertices and m)
+`python3 ./src/main.py --gen-graph --method BA --out ba_graph.csv --vertices 100 --m 10`
 - Analyse it :
 `python3 ./src/main.py --analyze ./ba_graph.csv`
 Informations on the graph should be printed on your terminal, and you can find more results in the pdf report generated for you (for this example it should be ./ba_graph-report.pdf)

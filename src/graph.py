@@ -19,7 +19,15 @@ class Graph:
 	def add_edge(self, src, dest):
 		if self.graph[src] == None:
 			self.graph[src] = [];
-		if dest not in self.graph[src]: self.graph[src].append(dest)
+
+		if self.graph[dest] == None:
+			self.graph[dest] = [];
+
+		if dest not in self.graph[src]: 
+			self.graph[src].append(dest)
+			
+		if src not in self.graph[dest]: 
+			self.graph[dest].append(src)
 
 	# Function to print the graph
 	def print_graph(self):
@@ -68,7 +76,6 @@ class Graph:
 			for i in self.graph:
 				for j in range(len(self.graph[i])):
 					print(i, self.graph[i][j])
-					print(self.graph[i][j], i)
 			sys.stdout = original_stdout
 
 
@@ -96,11 +103,11 @@ class Graph:
 
 		if diameter:
 			diameter = self.compute_diameter()
-			debug(diameter)
+			debug(" - diametre : ",diameter)
 
 		# (bonus) Le diamètre du graphe (le plus long plus court chemin entre n’importe quelle paire
 		# de sommets). Vous décrirez l’algorithme utilisé, ainsi que sa complexité.
-		pdf = makeReportPDF(name=self.name, nVertices=nVertices, nEdges=nEdges, maxValency=maxValency, avgValency=avgValency, curve=curve)
+		pdf = makeReportPDF(name=self.name, nVertices=nVertices, nEdges=nEdges, maxValency=maxValency, avgValency=avgValency, curve=curve,diameter=diameter)
 		print(f'Full report saved at : @reports/{pdf}')
 
 	def compute_nVertices(self):
@@ -124,7 +131,9 @@ class Graph:
 			n+=1
 			print(" compute_nEdges : ",round((n*100)/len(self.graph)),"%", end='\r')
 		print("")
-		return edgesCount;
+
+		#car les arretes sont dupliquer
+		return int(edgesCount/2);
 
 	def compute_maxValency(self):
 		maxValency = 0
@@ -188,7 +197,6 @@ class Graph:
 	def compute_diameter(self):
 		longest = 0
 		n = 0
-		#print(self.dijkstra(2034,1939))
 
 		for i in self.graph:
 			print(" compute_diameter : ",round((n*100)/(len(self.graph))),"%", end='\r')
@@ -208,16 +216,14 @@ class Graph:
 			nodes.append(n)
 
 		q = set(nodes)
-		debug(q)
 
 		nodes = list(q)
 		dist = dict()
+
 		for n in nodes:
 			dist[n] = float('inf')
 
 		dist[src] = 0
-
-
 
 		while q:
 			u = min(q, key=dist.get)
@@ -232,7 +238,7 @@ class Graph:
 				if v in dist and alt < dist[v]:
 					dist[v] = alt
 
-		debug("dist: ",dist," entre ",src," et le reste")
+		debug("dist: ",dist," src: ",src)
 
 		return dist
 
@@ -253,7 +259,8 @@ class utils:
 	def genRandom_BA(vertices, m):
 
 		if m < 1 or  m >= vertices:
-			print(f'Barabási–Albert network must have m >= 1 and m < n, m = {m}, n = {n}')
+			print(f'Barabási–Albert network must have m >= 1 and m < vertices, m = {m}, vertices = {vertices}')
+			return None;
 
 		graph = Graph()
 
@@ -284,14 +291,14 @@ class utils:
 		return res
 
 
-	def genRandomGraph(method):
+	def genRandomGraph(method,vertices,m):
 		if (method == "EG"):
 			print("\n### Generating a graph using Edgar Gilbert algorithm")
-			return utils.genRandom_EG(5);
+			return utils.genRandom_EG(vertices);
 
 		elif (method == "BA"):
 			print("\n### Generating a graph using Barabàsi-Albert algorithm")
-			return utils.genRandom_BA(5, 2);
+			return utils.genRandom_BA(vertices, m);
 
 		else:
 			print("\n### BEEEZRAZE")
