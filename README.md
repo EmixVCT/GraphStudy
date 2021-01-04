@@ -46,12 +46,12 @@ with v the number of vertices and e the number of edges
 
 								|	Adjacency list	|Adjacency matrix	|Incidence matrix
 ------------------------|-----------------|-----------------|----------------
-Store graph 				|	O(v+e)		|	O(v^2) 		|O(v·e)
+Store graph 				|	O(v+e)			|	O(v^2) 			|O(v·e)
 Add vertex 					|	O(1)				|	O(v^2)			|O(v·e)
 Add edge 					|	O(1) 				|	O(1) 				|O(v·e)
-Remove vertex 				|	O(e) 			|	O(v^2) 		|O(v·e)
-Remove edge 				|	O(v) 			|	O(1) 				|O(v·e)
-Are vertices x and y adjacent| 	O(v) 	|	O(1) 				|O(e)
+Remove vertex 				|	O(e) 				|	O(v^2) 			|O(v·e)
+Remove edge 				|	O(v) 				|	O(1) 				|O(v·e)
+Are vertices x and y adjacent| 	O(v) 		|	O(1) 				|O(e)
 Remarks 						|	Slow to remove vertices and edges, because it needs to find all vertices or edges | Slow to add or remove vertices, because matrix must be resized/copied | Slow to add or remove vertices and edges, because matrix must be resized/copied
 
 We will use an adjacency list for it's insertion operation efficiency.
