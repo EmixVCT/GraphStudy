@@ -1,5 +1,11 @@
 # GraphStudy
 Etude de graphes du Web
+Projet OCA 2020 2021
+
+Maxime Vincent
+Olivier Benaben
+Hugo Henrotte
+Maxence Bringuier
 
 ## Instructions
 - Install dependencies
