@@ -69,13 +69,21 @@ class Graph:
 		import sys
 		original_stdout = sys.stdout
 
+		list_tuple = []
+		for i in self.graph:
+			for j in range(len(self.graph[i])):
+				list_tuple.append((i, self.graph[i][j]))
+
+		aretes = [tuple(sorted(q)) for q in list_tuple]
+		aretes = list(set(aretes))
+
 		print(" * Saving graph to file", path.name)
 
+		
 		with open(path.name, 'w') as f:
 			sys.stdout = f # Change the standard output to the file we created.
-			for i in self.graph:
-				for j in range(len(self.graph[i])):
-					print(i, self.graph[i][j])
+			for a,b in aretes:
+				print(a,b)
 			sys.stdout = original_stdout
 
 
@@ -260,7 +268,7 @@ class utils:
 
 		if m < 1 or  m >= vertices:
 			print(f'Barabási–Albert network must have m >= 1 and m < vertices, m = {m}, vertices = {vertices}')
-			return None;
+			return -1;
 
 		graph = Graph()
 
