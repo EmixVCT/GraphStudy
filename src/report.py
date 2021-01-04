@@ -17,7 +17,7 @@ def convert_html_to_pdf(source_html, output_filename):
 	# return True on success and False on errors
 	return pisa_status.err
 
-def makePDF(name="name", nVertices="nVertices", nEdges="nEdges", maxValency="maxValency", avgValency="avgValency", curve="curve"):
+def makePDF(name="name", nVertices="nVertices", nEdges="nEdges", maxValency="maxValency", avgValency="avgValency", curve="curve",diameter="not computed"):
 	print(" * Building PDF report")
 
 	import matplotlib.pyplot as plt
@@ -28,20 +28,22 @@ def makePDF(name="name", nVertices="nVertices", nEdges="nEdges", maxValency="max
 	# plot the data
 	fig = plt.figure()
 	ax = fig.add_subplot(1, 1, 1)
-	ax.plot(curve['x'], curve['y'], color='tab:blue')
+	ax.plot(curve['x'], curve['y'], color='tab:red')
 
-	xevents1 = EventCollection(curve['x'], color='tab:blue', linelength=0.05)
-	yevents1 = EventCollection(curve['y'], color='tab:blue', linelength=0.05,
-							   orientation='vertical')
+	xevents1 = EventCollection(curve['x'], color='tab:blue', linelength=0.5)
+	yevents1 = EventCollection(curve['y'], color='tab:blue', linelength=0.5,orientation='vertical')
 
 	# add the events to the axis
 	ax.add_collection(xevents1)
 	ax.add_collection(yevents1)
-	#print(curve['y'])
+
+
+	if not diameter:
+		diameter = "not computed"
 
 	# set the limits
 	ax.set_xlim([0, maxValency+1])
-	ax.set_ylim([0, max(curve['y'])+1])
+	ax.set_ylim([0, max(curve['y'])+5])
 
 	ax.set_title('Distribution des degrés')
 	plt.xlabel('Degré')
@@ -58,9 +60,9 @@ def makePDF(name="name", nVertices="nVertices", nEdges="nEdges", maxValency="max
 	with open('template/index.html') as template:
 
 		report_html = template.read().replace('\n', '').replace('\t', '').format(image=my_base64_jpgData, 
-																				caption='Salut', width=300, height=200, 
+																				caption='Salut', width=600, height=400, 
 																				name=name, nVertices=nVertices, nEdges=nEdges, 
-																				maxValency=maxValency, avgValency=avgValency)
+																				maxValency=maxValency, avgValency=avgValency,diameter=diameter)
 
 		convert_html_to_pdf(report_html, name + '-report.pdf')
 
